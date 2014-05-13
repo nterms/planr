@@ -1,0 +1,199 @@
+@font-face {
+  font-family: 'Droid Sans Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Droid Sans Mono'), local('DroidSansMono'), url(../fonts/droid-sans-mono.woff) format('woff');
+}
+
+/*================= MISC =================*/
+.kmn-node { background: #ccffaa; color: #111; font-size: 12px;  }
+
+/*================= KMNODE =================*/
+
+/*================= CANVAS =================*/
+.kmn-frame {
+	font-family: 'Droid Sans Mono';
+	overflow: hidden; 
+	min-width: 400px; 
+	min-height: 200px; 
+}
+
+/*================= CANVAS =================*/
+.kmn-canvas {
+	background-image: url("../images/grid.gif");
+	border: 1px solid #ddd;
+	border-width: 0 1px 1px 0;
+	font-size: 12px;
+	position: relative;
+}
+
+.kmn-canvas canvas { position: absolute; }
+
+
+/*================= NODE =================*/
+.kmn-node {
+	border: 3px solid #6ba50f;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	cursor: pointer;
+	font-size: 100%;
+	position: absolute;
+}
+
+.kmn-node img { max-width: 100% }
+
+.kmn-node-remove, .kmn-node-note {
+	background: #6ba50f;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	display: none;
+	width: 20px;
+	height: 20px;
+	top: -14px;
+	right: -14px;
+	position: absolute;
+}
+
+.kmn-node-note {
+	background: none;
+	border-radius: 0 0 10px 10px;
+	-moz-border-radius: 0 0 10px 10px;
+	-webkit-border-radius: 0 0 10px 10px;
+	display: none;
+	width: 20px;
+	height: 20px;
+	bottom: -20px;
+	right: 0;
+	position: absolute;
+	top: auto;
+}
+
+.kmn-node-remove span, .kmn-node-note span { margin: 2px auto; }
+.kmn-node.selected .kmn-node-remove, .kmn-node.selected .kmn-node-note { display: block; }
+
+.kmn-node-content {
+	line-height: normal;
+	margin: 8px;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.kmn-node-editor, .kmn-node-editor:focus, .kmn-note-editor, .kmn-note-editor:focus {
+	background: transparent;
+	border-width: 0;
+	box-shadow: inset 0 0 1px #555; -moz-box-shadow: inset 0 0 1px #555; -webkit-box-shadow: inset 0 0 1px #555;
+	font-family: inherit;
+	margin: 0;
+	min-height: 16px;
+	outline: none;
+	padding: 0;
+	resize: none;
+}
+
+.kmn-node .ui-resizable-handle { display: none !important; }
+.kmn-node.selected .ui-resizable-handle { display: block !important; }
+
+/*================= NOTE =================*/
+.kmn-note {
+	background: #fffaaa;
+	border: 1px solid #aaa;
+	color: #666;
+	font-size: 100%;
+	position: absolute;
+}
+
+.kmn-note img { max-width: 100% }
+
+.kmn-note-remove, .kmn-note-close {
+	cursor: pointer;
+	width: 20px;
+	height: 20px;
+	top: -2px;
+	right: 0;
+	position: absolute;
+}
+.kmn-note-close {
+	left: 0;
+	right: auto;
+}
+.kmn-note-remove span, .kmn-note-close span { margin: 2px auto; }
+.kmn-note.selected .kmn-note-remove, .kmn-note.selected .kmn-note-close { display: block; }
+
+.kmn-note-content {
+	line-height: normal;
+	margin: 8px;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.kmn-note-link {
+	border: 0px solid #aaa;
+	position: absolute;
+}
+
+.kmn-note.collapsed { cursor: pointer; }
+.kmn-note.collapsed *:not(.kmn-note-link) { display: none !important; }
+
+/*.kmn-note .ui-resizable-handle { display: none !important; }
+.kmn-note.selected .ui-resizable-handle { display: block !important; } */
+
+/*================= LINKER =================*/
+.kmn-linker-handle { box-shadow: 0 0 10px #ccc; -moz-box-shadow: 0 0 10px #ccc; -webkit-box-shadow: 0 0 10px #ccc; cursor: pointer; }
+
+/*================= LINKER =================*/
+.kmn-breaker { cursor: pointer; }
+.kmn-breaker span { margin: 2px auto; }
+
+/*================= COLOR PICKER =================*/
+.kmn-color-picker {
+	background-color: #fafafa;
+	border: 1px solid #bbb;
+	border-radius: 16px; -moz-border-radius: 16px; -webkit-border-radius: 16px;
+	box-shadow: 0 0 10px #ccc; -moz-box-shadow: 0 0 10px #ccc; -webkit-box-shadow: 0 0 10px #ccc;
+	padding: 2px;
+	width: 26px;
+}
+
+.kmn-color-picker-button {
+	border: 1px solid #ddd;
+	border-radius: 12px; -moz-border-radius: 12px; -webkit-border-radius: 12px;
+	cursor: pointer;
+	height: 24px;
+	width: 24px;
+}
+
+.kmn-color-picker-palette { margin: 4px auto; width: 20px; }
+
+.kmn-color-picker-swatch {
+	border: 1px solid #ddd;
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;
+	cursor: pointer;
+	height: 18px;
+	margin: 4px 0;
+	width: 18px;
+}
+
+/*================= ZOOM =================*/
+.kmn-zoom {
+	font-size: 10px;
+}
+
+/*================= FULLSCREEN =================*/
+.kmn-fullscreen {
+	background: transparent url("../images/26x24-fullscreen.png") no-repeat 0 0;
+	/*border-radius: 20px; -moz-border-radius: 20px; -webkit-border-radius: 20px;*/
+	cursor: pointer;
+	height: 26px;
+	width: 26px;
+}
+
+.kmn-fullscreen.active {
+	background: transparent url("../images/26x24-fullscreen.png") no-repeat -40px 0;
+}
+
+/*================= JQUERY UI =================*/
+.kmnode .kmn-node-remove .ui-icon, .kmnode .kmn-node-note .ui-icon, .kmn-breaker .ui-icon {
+	background-image: url("../js/lib/css/ui-lightness/images/ui-icons_ffffff_256x240.png");
+}

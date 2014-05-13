@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DT</title>
+<meta name="description" content="Design Thinking application">
+<!-- Mobile viewport optimized: h5bp.com/viewport -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body id="body">
+<header>
+
+</header>
+<div role="main">
+<div id="container">
+<canvas id="canvas" style="border: 1px solid #f00;" width="500" height="500"></canvas>
+</div>
+</div>
+
+<footer>
+
+</footer>
+
+<!-- scripts -->
+
+
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+
+      context.beginPath();
+      context.moveTo(100, 150);
+      context.lineTo(450, 50);
+      context.lineWidth = 10;
+
+      // set line color
+      context.strokeStyle = '#ff0000';
+      context.stroke();
+</script>
+<!-- end scripts -->
+
+<!-- Prompt IE 6 users to install Chrome Frame. -->
+<!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+<![endif]-->
+</body>
+</html>
