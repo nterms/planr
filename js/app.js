@@ -1,30 +1,30 @@
-if(typeof twine == 'undefined') { twine = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
-twine.appUrl = 'http://localhost/twine';
+planr.appUrl = 'http://localhost/planr';
 
-twine.oauth: {
-	returnUrl: twine.appUrl + '/oauth.html',
+planr.oauth: {
+	returnUrl: planr.appUrl + '/oauth.html',
 	google: {
 		clientId: '1065004426697.apps.googleusercontent.com'
 	}
 };
 
-twine.oauth.google.signIn = function() {
+planr.oauth.google.signIn = function() {
 	window.location = 	'https://accounts.google.com/o/oauth2/auth?' +
-						'client_id=' + twine.oauth.google.clientId + '&' +
+						'client_id=' + planr.oauth.google.clientId + '&' +
 						'response_type=token' + '&' +
-						'redirect_uri=' + twine.oauth.returnUrl + '&' +
+						'redirect_uri=' + planr.oauth.returnUrl + '&' +
 						'scope=email profile';
 };
 
-twine.oauth.google.handleResponse = function() {
+planr.oauth.google.handleResponse = function() {
 	
 };
 
-twine.oauth.google.setAccessToken = function(accessToken) {
-	localStorage.setItem('twine_google_access_token', accessToken);
+planr.oauth.google.setAccessToken = function(accessToken) {
+	localStorage.setItem('planr_google_access_token', accessToken);
 };
 
-twine.oauth.google.getAccessToken = function() {
-	return localStorage.getItem('twine_google_access_token');
+planr.oauth.google.getAccessToken = function() {
+	return localStorage.getItem('planr_google_access_token');
 };

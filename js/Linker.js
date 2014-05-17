@@ -1,17 +1,18 @@
 /*!
  * Linker.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Linker = function() {
+	planr.Linker = function() {
 		this.handle		= null;
 		this.link		= null;
 		this.canvas		= null;
@@ -28,33 +29,33 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the object
 	 */
-	kmnode.Linker.prototype.init = function() {
+	planr.Linker.prototype.init = function() {
 		var linker		= this;
-		this.handle 	= $('<div>').addClass('kmn-linker-handle');
-		this.link 		= $('<canvas>').addClass('kmn-linker-link');
+		this.handle 	= $('<div>').addClass('planr-linker-handle');
+		this.link 		= $('<canvas>').addClass('planr-linker-link');
 		
 		this.handle.draggable({
 			containment: 'parent',
 			drag: function(event, ui) {
-				linker.x = ui.position.left * (1/kmnode.ZOOM_FACTOR) + Math.floor(linker.width/2);
-				linker.y = ui.position.top * (1/kmnode.ZOOM_FACTOR) + Math.floor(linker.height/2);
+				linker.x = ui.position.left * (1/planr.ZOOM_FACTOR) + Math.floor(linker.width/2);
+				linker.y = ui.position.top * (1/planr.ZOOM_FACTOR) + Math.floor(linker.height/2);
 				linker.update();
 			},
 			stop: function(event, ui) {
-				var x = ui.position.left * (1/kmnode.ZOOM_FACTOR) + linker.width/2; //((linker.width/2) * kmnode.ZOOM_FACTOR);
-				var y = ui.position.top * (1/kmnode.ZOOM_FACTOR) + linker.height/2; //((linker.height/2) * kmnode.ZOOM_FACTOR);
+				var x = ui.position.left * (1/planr.ZOOM_FACTOR) + linker.width/2; //((linker.width/2) * planr.ZOOM_FACTOR);
+				var y = ui.position.top * (1/planr.ZOOM_FACTOR) + linker.height/2; //((linker.height/2) * planr.ZOOM_FACTOR);
 				//linker.canvas.element.append('<div class="dot" style="border: 1px solid #f00; position: absolute; width: 1px; height: 1px; left: ' + x + 'px; top: ' + y + 'px;"></div>');
 				// did we step on a node?
 				var node = linker.canvas.nodeAt(x, y);
 				if(node == null) {
 					// no.. we didn't step on a node, just create a new node :)
-					node = new kmnode.Node(x, y);
+					node = new planr.Node(x, y);
 					linker.canvas.document.addNode(node);
 				}
 				
 				if(typeof linker.canvas.document != 'undefined') {
 					linker.canvas.document.addConnector(linker.node, node);
-					kmnode.events.emitEvent(kmnode.event.NODE_SELECTED, [node]);
+					planr.events.emitEvent(planr.event.NODE_SELECTED, [node]);
 					linker.canvas.render(); // TODO Might not be the best way to update the canvas, need some optimizing
 				}
 				linker.reset();
@@ -70,7 +71,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Sets the canvas
 	 */
-	kmnode.Linker.prototype.setCanvas = function(canvas) {
+	planr.Linker.prototype.setCanvas = function(canvas) {
 		this.canvas = canvas;
 		canvas.element.append(this.handle);
 		canvas.element.append(this.link);
@@ -79,7 +80,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Attach the linker to a node
 	 */
-	kmnode.Linker.prototype.attachTo = function(node) {
+	planr.Linker.prototype.attachTo = function(node) {
 		this.node = node;
 		// calculate position related to the node
 		this.x = node.x;
@@ -90,7 +91,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Detach the linker from a node
 	 */
-	kmnode.Linker.prototype.detach = function() {
+	planr.Linker.prototype.detach = function() {
 		this.node = null;
 		this.update();
 	};
@@ -98,7 +99,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Detach the linker from a node
 	 */
-	kmnode.Linker.prototype.reset = function() {
+	planr.Linker.prototype.reset = function() {
 		// calculate position related to the node
 		if(this.node == null) {
 			this.x = 0;
@@ -115,7 +116,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) handle element of the Linker
 	 */
-	kmnode.Linker.prototype.getHandle = function() {
+	planr.Linker.prototype.getHandle = function() {
 		return this.handle;
 	};
 	
@@ -124,15 +125,15 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) link element of the Linker
 	 */
-	kmnode.Linker.prototype.getLink = function() {
+	planr.Linker.prototype.getLink = function() {
 		return this.link;
 	};
 	
 	/**
 	 * Update the linker
 	 */
-	kmnode.Linker.prototype.update = function() {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Linker.prototype.update = function() {
+		var zoom = planr.ZOOM_FACTOR;
 		
 		// hide if node is not set
 		if(this.node == null) {

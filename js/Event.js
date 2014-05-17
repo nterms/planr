@@ -1,17 +1,19 @@
 /*!
- * Document.js
+ * Event.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ *
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Event = function() {
+	planr.Event = function() {
 		this.name		= 'New Document';
 		this.nodes 		= null;
 		this.connectors = null;
@@ -22,7 +24,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the document
 	 */
-	kmnode.Document.prototype.init = function(name) {
+	planr.Document.prototype.init = function(name) {
 		if(typeof name == 'undefined') {
 			this.name = name;
 		}
@@ -34,10 +36,10 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Add a node to the list of nodes
 	 * 
-	 * @param {kmnode.Node} Node to be added to the document
+	 * @param {planr.Node} Node to be added to the document
 	 * @rerurn {Number} Number of nodes in the list
 	 */
-	kmnode.Document.prototype.addNode = function(node) {
+	planr.Document.prototype.addNode = function(node) {
 		this.nodes.push(node);
 		return this.nodes.length;
 	};
@@ -45,12 +47,12 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Add a connector between two nodes
 	 * 
-	 * @param {kmnode.Node} Starting node
-	 * @param {kmnode.Node} Ending node
+	 * @param {planr.Node} Starting node
+	 * @param {planr.Node} Ending node
 	 * @rerurn {Number} Number of connectors in the list
 	 */
-	kmnode.Document.prototype.addConnector = function(nodeFrom, nodeTo) {
-		var connector = new kmnode.Connector(nodeFrom, nodeTo);
+	planr.Document.prototype.addConnector = function(nodeFrom, nodeTo) {
+		var connector = new planr.Connector(nodeFrom, nodeTo);
 		this.connectors.push(connector);
 		return connector;
 	};
@@ -60,7 +62,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {Array} List of nodes in the document
 	 */
-	kmnode.Document.prototype.getNodes = function() {
+	planr.Document.prototype.getNodes = function() {
 		return this.nodes;
 	};
 	
@@ -69,7 +71,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {Array} List of connectors in the document
 	 */
-	kmnode.Document.prototype.getConnectors = function() {
+	planr.Document.prototype.getConnectors = function() {
 		return this.connectors;
 	};
 

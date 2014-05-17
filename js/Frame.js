@@ -1,17 +1,18 @@
 /*!
  * Frame.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Frame = function(container) {
+	planr.Frame = function(container) {
 		this.container 	= null;
 		this.canvas 	= null;
 		this.fs 		= null;
@@ -26,17 +27,17 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the frame
 	 */
-	kmnode.Frame.prototype.init = function(container) {
+	planr.Frame.prototype.init = function(container) {
 		var frame 		= this;
 		this.container 	= $("#" + container);
 		this.height 	= this.container.height();
 		this.width 		= this.container.width();
 		// create frame element
-		this.element = $('<div>').addClass('kmn-frame').css({width: this.width, height: this.height});
-		this.container.addClass('kmnode').html(this.element);
+		this.element = $('<div>').addClass('planr-frame').css({width: this.width, height: this.height});
+		this.container.addClass('planr').html(this.element);
 		
 		// full screen button
-		this.fs = $('<div>').addClass('kmn-fullscreen').css({position: 'absolute', bottom: 20, right: 20});
+		this.fs = $('<div>').addClass('planr-fullscreen').css({position: 'absolute', bottom: 20, right: 20});
 		this.element.append(this.fs);
 		
 		this.fs.click(function(evt) {
@@ -52,7 +53,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		});
 		
 		// storage
-		this.storage = new kmnode.Storage();
+		this.storage = new planr.Storage();
 	};
 	
 	/**
@@ -60,19 +61,19 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the frame
 	 */
-	kmnode.Frame.prototype.getElement = function() {
+	planr.Frame.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Set the canvas of the frame
 	 *
-	 * @param {kmnode.Canvas} The Canvas object
+	 * @param {planr.Canvas} The Canvas object
 	 */
-	kmnode.Frame.prototype.setCanvas = function(canvas) {
+	planr.Frame.prototype.setCanvas = function(canvas) {
 		this.canvas = canvas;
 		this.canvas.frame = this;
-		this.element.find('.kmn-canvas').remove();
+		this.element.find('.planr-canvas').remove();
 		this.element.prepend(this.canvas.getElement());
 	};
 	
@@ -82,7 +83,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @param {Object} A widget object
 	 */
-	kmnode.Frame.prototype.addWidget = function(widget, position) {
+	planr.Frame.prototype.addWidget = function(widget, position) {
 		widget.setFrame(this);
 	};
 	
@@ -91,7 +92,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {Boolean} true if jquery.dragscroll plugin is available and dragsrolling enabled, false otherwise
 	 */
-	kmnode.Frame.prototype.enableDragscroll = function() {
+	planr.Frame.prototype.enableDragscroll = function() {
 		if(jQuery().dragscroll) {
 			this.element.dragscroll({
 				scrollBars: false,
@@ -100,11 +101,11 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 			});
 			
 			// fix the fullscreen button
-			this.element.find('.kmn-fullscreen').appendTo(this.element);
+			this.element.find('.planr-fullscreen').appendTo(this.element);
 			
 			// center the canvas
-			var left = (kmnode.CANVAS_WIDTH - this.width) / 2;
-			var top = (kmnode.CANVAS_HEIGHT - this.height) / 2;
+			var left = (planr.CANVAS_WIDTH - this.width) / 2;
+			var top = (planr.CANVAS_HEIGHT - this.height) / 2;
 			this.element.find('.dragscroll-scroller').scrollLeft(left).scrollTop(top);
 			
 			return true;

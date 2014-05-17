@@ -1,18 +1,19 @@
 /*!
  * Node.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Node = function(x, y) {
-		this.id			= kmnode.generateId();
+	planr.Node = function(x, y) {
+		this.id			= planr.generateId();
 		this.element	= null;
 		this.content	= null;
 		this.editor		= null;
@@ -52,19 +53,19 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the node
 	 */
-	kmnode.Node.prototype.init = function(x, y) {
+	planr.Node.prototype.init = function(x, y) {
 		var node = this;
 		this.x = x; this.y = y;
 		
 		// the node element
-		this.content 	= $('<div class="kmn-node-content"></div>');
-		this.editor 	= $('<textarea class="kmn-node-editor"></textarea>');
-		this.remove		= $('<div class="kmn-node-remove" title="Remove"><span class="ui-icon ui-icon-close"></span></div>');
-		this.noteLink	= $('<div class="kmn-node-note" title="Note"><span class="ui-icon ui-icon-document"></span></div>');
-		this.element 	= $('<div>').addClass('kmn-node').append(this.content, this.editor, this.remove, this.noteLink);
+		this.content 	= $('<div class="planr-node-content"></div>');
+		this.editor 	= $('<textarea class="planr-node-editor"></textarea>');
+		this.remove		= $('<div class="planr-node-remove" title="Remove"><span class="ui-icon ui-icon-close"></span></div>');
+		this.noteLink	= $('<div class="planr-node-note" title="Note"><span class="ui-icon ui-icon-document"></span></div>');
+		this.element 	= $('<div>').addClass('planr-node').append(this.content, this.editor, this.remove, this.noteLink);
 		
 		// note
-		this.note 		= new kmnode.Note(this);
+		this.note 		= new planr.Note(this);
 		
 		// hide editor
 		this.editor.hide();
@@ -75,8 +76,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		this.element.resizable({
 			alsoRezise: this.content,
 			resize: function(event, ui) {
-				node.width = ui.size.width * (1/kmnode.ZOOM_FACTOR);
-				node.height = ui.size.height * (1/kmnode.ZOOM_FACTOR);
+				node.width = ui.size.width * (1/planr.ZOOM_FACTOR);
+				node.height = ui.size.height * (1/planr.ZOOM_FACTOR);
 				node.update();
 			},
 			stop: function(event, ui) {
@@ -87,15 +88,15 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		this.element.draggable({
 			containment: 'parent',
 			drag: function(event, ui) {
-				node.x = ui.position.left * (1/kmnode.ZOOM_FACTOR) + Math.floor(node.width/2);
-				node.y = ui.position.top * (1/kmnode.ZOOM_FACTOR) + Math.floor(node.height/2);
+				node.x = ui.position.left * (1/planr.ZOOM_FACTOR) + Math.floor(node.width/2);
+				node.y = ui.position.top * (1/planr.ZOOM_FACTOR) + Math.floor(node.height/2);
 				
 				node.update();
-				kmnode.events.emitEvent(kmnode.event.NODE_MOVED, [node]);
+				planr.events.emitEvent(planr.event.NODE_MOVED, [node]);
 			},
 			stop: function(event, ui) {
 				node.update();
-				kmnode.events.emitEvent(kmnode.event.NODE_MOVED, [node]);
+				planr.events.emitEvent(planr.event.NODE_MOVED, [node]);
 			}
 		});
 		
@@ -114,7 +115,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		
 		this.element.click(function(evt) {
 			evt.stopPropagation();
-			kmnode.events.emitEvent(kmnode.event.NODE_SELECTED, [node]);
+			planr.events.emitEvent(planr.event.NODE_SELECTED, [node]);
 		});
 		
 		// handle double click on node
@@ -131,7 +132,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		// remove node
 		this.remove.click(function(evt) {
 			evt.stopPropagation();
-			kmnode.events.emitEvent(kmnode.event.NODE_REMOVE_CLICKED, [node]);
+			planr.events.emitEvent(planr.event.NODE_REMOVE_CLICKED, [node]);
 		});
 		
 		// note link
@@ -139,7 +140,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 			evt.stopPropagation();
 			if(node.note.visible) {
 				node.note.hide();
-				kmnode.events.emitEvent(kmnode.event.NODE_NOTE_CLOSED, [node]);
+				planr.events.emitEvent(planr.event.NODE_NOTE_CLOSED, [node]);
 			} else {
 				node.note.show();
 				if(node.note.collapsed) {
@@ -147,9 +148,9 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 				}
 				if(node.note.text == '') {
 					node.note.enableEditing();
-					kmnode.events.emitEvent(kmnode.event.NOTE_SELECTED, [node.note]);
+					planr.events.emitEvent(planr.event.NOTE_SELECTED, [node.note]);
 				}
-				kmnode.events.emitEvent(kmnode.event.NODE_NOTE_OPENED, [node]);
+				planr.events.emitEvent(planr.event.NODE_NOTE_OPENED, [node]);
 			}
 		});
 		
@@ -171,7 +172,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {String} JSON string of the node
 	 */
-	kmnode.Node.prototype.toString = function() {
+	planr.Node.prototype.toString = function() {
 		var connectors = new Array();
 		
 		/* convert the connectors
@@ -203,7 +204,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {HTMLCanvasElement} HTML canvas element
 	 */
-	kmnode.Node.prototype.toCanvas = function() {
+	planr.Node.prototype.toCanvas = function() {
 		if(this._canvas == null) {
 			this._canvas = $('<canvas>');
 		}
@@ -216,10 +217,10 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		ctx.lineWidth = this._borderWidth * 2;
 		ctx.font = this._textSize + 'px Droid Sans Mono';
 		
-		kmnode.roundRect(ctx, this._borderWidth, this._borderWidth, this._width, this._height, this._borderRadius, true, true);
+		planr.roundRect(ctx, this._borderWidth, this._borderWidth, this._width, this._height, this._borderRadius, true, true);
 		
 		ctx.fillStyle = this.textColor;
-		kmnode.wrapText(ctx, this.text, (this._padding + this._borderWidth), (this._padding * 2 + this._borderWidth * 2), (this._width - this._padding), Math.floor(this._textSize * 1.33));
+		planr.wrapText(ctx, this.text, (this._padding + this._borderWidth), (this._padding * 2 + this._borderWidth * 2), (this._width - this._padding), Math.floor(this._textSize * 1.33));
 		
 		return canvas;
 	};
@@ -229,7 +230,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @param {String} JSON object/string of the node
 	 */
-	kmnode.Node.prototype.fromJSON = function(json) {
+	planr.Node.prototype.fromJSON = function(json) {
 		var n = (typeof json == 'string') ? eval("(" + json + ")") : json;
 		var node = this;
 		
@@ -257,7 +258,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * Enables editing of node content
 	 *
 	 */
-	kmnode.Node.prototype.enableEditing = function() {
+	planr.Node.prototype.enableEditing = function() {
 		this.content.hide();
 		this.editor.val(this.text).css('display', 'block');
 		this.editor.show().focus().select();
@@ -269,7 +270,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * Disables editing of node content
 	 *
 	 */
-	kmnode.Node.prototype.disableEditing = function() {
+	planr.Node.prototype.disableEditing = function() {
 		this.text = this.editor.val();
 		this.html = this.text.replace(/\n/g, "<br/>");
 		this.editor.hide();
@@ -284,14 +285,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the node
 	 */
-	kmnode.Node.prototype.getElement = function() {
+	planr.Node.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Set text
 	 */
-	kmnode.Node.prototype.setText = function(text) {
+	planr.Node.prototype.setText = function(text) {
 		this.text = text;
 		this.html = text;
 		this.update();
@@ -300,7 +301,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set html
 	 */
-	kmnode.Node.prototype.setHtml = function(html) {
+	planr.Node.prototype.setHtml = function(html) {
 		this.html = html;
 		this.update();
 	};
@@ -308,7 +309,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set x
 	 */
-	kmnode.Node.prototype.setX = function(x) {
+	planr.Node.prototype.setX = function(x) {
 		this.x = x;
 		this.update();
 	};
@@ -316,7 +317,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set y
 	 */
-	kmnode.Node.prototype.setY = function(y) {
+	planr.Node.prototype.setY = function(y) {
 		this.y = y;
 		this.update();
 	};
@@ -324,7 +325,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set height
 	 */
-	kmnode.Node.prototype.setHeight = function(height) {
+	planr.Node.prototype.setHeight = function(height) {
 		this.height = height;
 		this.update();
 	};
@@ -332,7 +333,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set width
 	 */
-	kmnode.Node.prototype.setWidth = function(width) {
+	planr.Node.prototype.setWidth = function(width) {
 		this.width = width;
 		this.update();
 	};
@@ -340,7 +341,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set color
 	 */
-	kmnode.Node.prototype.setColor = function(color) {
+	planr.Node.prototype.setColor = function(color) {
 		this.color = color;
 		this.update();
 	};
@@ -348,7 +349,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set border color
 	 */
-	kmnode.Node.prototype.setBorderColor = function(color) {
+	planr.Node.prototype.setBorderColor = function(color) {
 		this.borderColor = color;
 		this.update();
 	};
@@ -356,7 +357,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set border width
 	 */
-	kmnode.Node.prototype.setBorderWidth = function(width) {
+	planr.Node.prototype.setBorderWidth = function(width) {
 		this.borderWidth = width;
 		this.update();
 	};
@@ -364,7 +365,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set tesxt color
 	 */
-	kmnode.Node.prototype.setTextColor = function(color) {
+	planr.Node.prototype.setTextColor = function(color) {
 		this.textColor = color;
 		this.update();
 	};
@@ -372,7 +373,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set text zise
 	 */
-	kmnode.Node.prototype.setTextSize = function(size) {
+	planr.Node.prototype.setTextSize = function(size) {
 		this.textSize = size;
 		this.update();
 	};
@@ -381,8 +382,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * Update the visual properties of the node
 	 * 
 	 */
-	kmnode.Node.prototype.update = function() {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Node.prototype.update = function() {
+		var zoom = planr.ZOOM_FACTOR;
 		
 		var height 			= Math.ceil(this.height * zoom);
 		var width 			= Math.ceil(this.width * zoom);
@@ -449,7 +450,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 		this.note.update();
 		
 		// trigger the event node updated
-		kmnode.events.emitEvent(kmnode.event.NODE_UPDATED, [this]);
+		planr.events.emitEvent(planr.event.NODE_UPDATED, [this]);
 		
 		this._left			= left - borderWidth;
 		this._top			= top - borderWidth;

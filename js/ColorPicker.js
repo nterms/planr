@@ -1,17 +1,18 @@
 /*!
  * ColorPicker.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.ColorPicker = function(colors, handler, type, position) {
+	planr.ColorPicker = function(colors, handler, type, position) {
 		this.element	= null;
 		this.button		= null;
 		this.palette	= null;
@@ -30,12 +31,12 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the object
 	 */
-	kmnode.ColorPicker.prototype.init = function(colors, handler, type, position) {
+	planr.ColorPicker.prototype.init = function(colors, handler, type, position) {
 		var cp 			= this;
-		this.button 	= $('<div>').addClass('kmn-color-picker-button').html('<canvas height="24" width="24"></canvas>');
-		//this.close	= $('<div>').addClass('kmn-color-picker-close');
-		this.palette 	= $('<div>').addClass('kmn-color-picker-palette');
-		this.element 	= $('<div>').addClass('kmn-color-picker');
+		this.button 	= $('<div>').addClass('planr-color-picker-button').html('<canvas height="24" width="24"></canvas>');
+		//this.close	= $('<div>').addClass('planr-color-picker-close');
+		this.palette 	= $('<div>').addClass('planr-color-picker-palette');
+		this.element 	= $('<div>').addClass('planr-color-picker');
 		this.element.append(this.button, this.palette, this.close);
 		
 		if(typeof position == 'object') {
@@ -68,14 +69,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the ColorPicker
 	 */
-	kmnode.ColorPicker.prototype.getElement = function() {
+	planr.ColorPicker.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Adds this widget to the frame
 	 */
-	kmnode.ColorPicker.prototype.setFrame = function(frame) {
+	planr.ColorPicker.prototype.setFrame = function(frame) {
 		this.frame = frame;
 		frame.element.append(this.element);
 	};
@@ -86,14 +87,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * @param {String} A color code to add to the list of swatches
 	 * @rerurn {Number} Number of colors in the list
 	 */
-	kmnode.ColorPicker.prototype.addSwatch = function(color) {
+	planr.ColorPicker.prototype.addSwatch = function(color) {
 		if(/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(color)) {
 			var cp = this;
 			var code = color.replace('#', '');
-			var swatch = $('<div>').addClass('kmn-color-picker-swatch swatch-' + code).attr('data-color', color).css('backgroundColor', color);
+			var swatch = $('<div>').addClass('planr-color-picker-swatch swatch-' + code).attr('data-color', color).css('backgroundColor', color);
 			swatch.click(function(evt) {
 				evt.stopPropagation();
-				cp.palette.find('.kmn-color-picker-swatch').removeClass('selected');
+				cp.palette.find('.planr-color-picker-swatch').removeClass('selected');
 				swatch.addClass('selected');
 				cp.color = color;
 				cp.handler(color);
@@ -108,14 +109,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Open the color palette
 	 */
-	kmnode.ColorPicker.prototype.open = function() {
+	planr.ColorPicker.prototype.open = function() {
 		this.palette.animate({height: 'show'});
 	};
 	
 	/**
 	 * Close the color palette
 	 */
-	kmnode.ColorPicker.prototype.close = function() {
+	planr.ColorPicker.prototype.close = function() {
 		this.palette.hide();
 	};
 	
@@ -124,7 +125,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {String} The selected color
 	 */
-	kmnode.ColorPicker.prototype.getColor = function() {
+	planr.ColorPicker.prototype.getColor = function() {
 		return this.color;
 	};
 	
@@ -133,7 +134,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {String} The selected color
 	 */
-	kmnode.ColorPicker.prototype.setColor = function(color) {
+	planr.ColorPicker.prototype.setColor = function(color) {
 		var code = color.replace('#', '');
 		this.palette.find('swatch-' + color).click();
 		return this.color;
@@ -142,7 +143,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Update the button icon
 	 */
-	kmnode.ColorPicker.prototype.updateButton = function() {
+	planr.ColorPicker.prototype.updateButton = function() {
 		var canvas 	= this.button.find('canvas').get(0);
 		var context = canvas.getContext('2d');
 		context.clearRect(0, 0, 24, 24);

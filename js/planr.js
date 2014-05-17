@@ -1,49 +1,50 @@
 /*!
- * kmnode.js
+ * planr.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 /**
  * @param {Number} Zoom factor
  */
-kmnode.ZOOM_FACTOR = 1; // 100%
+planr.ZOOM_FACTOR = 1; // 100%
 
 /**
  * @param {Number} Default canvas height
  */
-kmnode.CANVAS_HEIGHT = 2000; // 500px
+planr.CANVAS_HEIGHT = 2000; // 500px
 
 /**
  * @param {Number} Default canvas width
  */
-kmnode.CANVAS_WIDTH = 4000; // 1000px
+planr.CANVAS_WIDTH = 4000; // 1000px
 
 /**
- * @param {kmnode.Frame} Reference to the frame object
+ * @param {planr.Frame} Reference to the frame object
  */
-kmnode.frame = null;
+planr.frame = null;
 
 /**
- * @param {kmnode.Node} The selected node
+ * @param {planr.Node} The selected node
  */
-kmnode.selectedNode = null;
+planr.selectedNode = null;
 
 /**
- * @param {kmnode.Note} The selected note
+ * @param {planr.Note} The selected note
  */
-kmnode.selectedNote = null;
+planr.selectedNote = null;
 
 /**
  * @param {Object} Event object
  */
-kmnode.event = {
+planr.event = {
 	NODE_SELECTED: 			'nodeSelected',
 	NODE_MOVED: 			'nodeMoved',
 	NODE_REMOVE_CLICKED: 	'nodeRemoveClicked',
@@ -61,121 +62,121 @@ kmnode.event = {
 /**
  * @param {EventEmitter} Event emitter object
  */
-kmnode.events = new EventEmitter();
+planr.events = new EventEmitter();
 
 // node selected
-kmnode.events.addListener(kmnode.event.NODE_SELECTED, function(node) {
-	kmnode.frame.canvas.element.find('.kmn-node').removeClass('selected');
+planr.events.addListener(planr.event.NODE_SELECTED, function(node) {
+	planr.frame.canvas.element.find('.kmn-node').removeClass('selected');
 	node.element.addClass('selected');
-	kmnode.selectedNode = node;
-	kmnode.frame.canvas.linker.attachTo(node);
-	kmnode.frame.canvas.breaker.detach();
+	planr.selectedNode = node;
+	planr.frame.canvas.linker.attachTo(node);
+	planr.frame.canvas.breaker.detach();
 });
 
 // node moved
-kmnode.events.addListener(kmnode.event.NODE_MOVED, function(node) {
+planr.events.addListener(planr.event.NODE_MOVED, function(node) {
 	
 });
 
 // node removed
-kmnode.events.addListener(kmnode.event.NODE_REMOVE_CLICKED, function(node) {
+planr.events.addListener(planr.event.NODE_REMOVE_CLICKED, function(node) {
 	if(confirm('Are you sure you want to remove this node?')) {
-		if(typeof kmnode.frame.canvas.document != 'undefined') {
-			kmnode.frame.canvas.document.removeNode(node);
-			kmnode.frame.canvas.linker.detach(); // detach the linker from the node
+		if(typeof planr.frame.canvas.document != 'undefined') {
+			planr.frame.canvas.document.removeNode(node);
+			planr.frame.canvas.linker.detach(); // detach the linker from the node
 		}
 	}
 });
 
 // node updated
-kmnode.events.addListener(kmnode.event.NODE_UPDATED, function(node) {
-	if(kmnode.selectedNode == node) {
-		kmnode.frame.canvas.linker.attachTo(node);
+planr.events.addListener(planr.event.NODE_UPDATED, function(node) {
+	if(planr.selectedNode == node) {
+		planr.frame.canvas.linker.attachTo(node);
 	}
-	kmnode.frame.canvas.breaker.detach();
+	planr.frame.canvas.breaker.detach();
 });
 
 // connector selected
-kmnode.events.addListener(kmnode.event.CONNECTOR_SELECTED, function(connector) {
-	kmnode.frame.canvas.element.find('.kmn-connector').removeClass('selected');
+planr.events.addListener(planr.event.CONNECTOR_SELECTED, function(connector) {
+	planr.frame.canvas.element.find('.kmn-connector').removeClass('selected');
 	connector.element.addClass('selected');
-	kmnode.selectedConnector = connector;
-	kmnode.frame.canvas.breaker.attachTo(connector);
+	planr.selectedConnector = connector;
+	planr.frame.canvas.breaker.attachTo(connector);
 });
 
 // node removed
-kmnode.events.addListener(kmnode.event.BREAKER_CLICKED, function(breaker) {
-	if(typeof kmnode.frame.canvas.document != null && breaker.connector != null) {
-		kmnode.frame.canvas.document.removeConnector(breaker.connector);
+planr.events.addListener(planr.event.BREAKER_CLICKED, function(breaker) {
+	if(typeof planr.frame.canvas.document != null && breaker.connector != null) {
+		planr.frame.canvas.document.removeConnector(breaker.connector);
 		// remove connector element from canvas
 		breaker.connector.element.remove();
-		kmnode.frame.canvas.breaker.detach(); // detach the linker from the node
+		planr.frame.canvas.breaker.detach(); // detach the linker from the node
 	}
 });
 
 // note selected
-kmnode.events.addListener(kmnode.event.NOTE_SELECTED, function(note) {
-	kmnode.frame.canvas.element.find('.kmn-note').removeClass('selected');
+planr.events.addListener(planr.event.NOTE_SELECTED, function(note) {
+	planr.frame.canvas.element.find('.kmn-note').removeClass('selected');
 	note.element.addClass('selected');
-	kmnode.selectedNote = note;
+	planr.selectedNote = note;
 });
 
 // canvas selected
-kmnode.events.addListener(kmnode.event.CANVAS_SELECTED, function(canvas) {
+planr.events.addListener(planr.event.CANVAS_SELECTED, function(canvas) {
 	// de-select the nodes
 	canvas.element.find('.kmn-node').removeClass('selected');
-	if(kmnode.selectedNode != null) {
-		kmnode.selectedNode.disableEditing();
+	if(planr.selectedNode != null) {
+		planr.selectedNode.disableEditing();
 	}
-	kmnode.selectedNode = null;
+	planr.selectedNode = null;
 	
 	// de-select the notes
 	canvas.element.find('.kmn-note').removeClass('selected');
-	if(kmnode.selectedNote != null) {
-		kmnode.selectedNote.disableEditing();
+	if(planr.selectedNote != null) {
+		planr.selectedNote.disableEditing();
 	}
-	kmnode.selectedNote = null;
+	planr.selectedNote = null;
 	
-	kmnode.frame.canvas.linker.detach();
-	kmnode.frame.canvas.breaker.detach();
+	planr.frame.canvas.linker.detach();
+	planr.frame.canvas.breaker.detach();
 });
 
 /**
- * @param {HTMLElement} The HTML element to run kmnode
+ * @param {HTMLElement} The HTML element to run planr
  */
-kmnode.run = function(container){
-	kmnode.frame = frame = new kmnode.Frame(container);
+planr.run = function(container){
+	planr.frame = frame = new planr.Frame(container);
 	
-	frame.setCanvas(new kmnode.Canvas());
+	frame.setCanvas(new planr.Canvas());
 	frame.enableDragscroll();
 	
 	// add a new document
-	var document = new kmnode.Document();
+	var document = new planr.Document();
 	frame.canvas.setDocument(document);
 	
 	// add a ColorPicker
-	var cp = new kmnode.ColorPicker(['#b3b3b3', '#e6e6e6', '#fff6d5', '#ffeeaa', '#ccffaa', '#ffccaa', '#ffaaaa', '#e9c6af', '#eeaaff', '#afc6e9', '#afdde9', '#aaeeff', '#ffffff'], function(color) { kmnode.selectedNode.setColor(color); }, 'background', {right: 140, top: 20});
+	var cp = new planr.ColorPicker(['#b3b3b3', '#e6e6e6', '#fff6d5', '#ffeeaa', '#ccffaa', '#ffccaa', '#ffaaaa', '#e9c6af', '#eeaaff', '#afc6e9', '#afdde9', '#aaeeff', '#ffffff'], function(color) { planr.selectedNode.setColor(color); }, 'background', {right: 140, top: 20});
 	frame.addWidget(cp);
 	
-	var cpBor = new kmnode.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { kmnode.selectedNode.setBorderColor(color); }, 'border', {right: 100, top: 20});
+	var cpBor = new planr.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { planr.selectedNode.setBorderColor(color); }, 'border', {right: 100, top: 20});
 	frame.addWidget(cpBor);
 	
-	var cpFon = new kmnode.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { kmnode.selectedNode.setTextColor(color); }, 'font', {right: 60, top: 20});
+	var cpFon = new planr.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { planr.selectedNode.setTextColor(color); }, 'font', {right: 60, top: 20});
 	frame.addWidget(cpFon);
 	
-	var zoom = new kmnode.Zoom(1, function() {}, 'h', {left: 20, bottom: 20});
+	var zoom = new planr.Zoom(1, function() {}, 'h', {left: 20, bottom: 20});
 	frame.addWidget(zoom);
 	
-	var cpCon = new kmnode.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { 
-		if(kmnode.selectedNode != null) {
-			$.each(kmnode.selectedNode.connectors, function(i, con) { 
+	var cpCon = new planr.ColorPicker(['#000000', '#808080', '#ffd42a', '#d4aa00', '#6ba50f', '#d45500', '#d40000', '#800000', '#8800aa', '#162d50', '#005580', '#0088cc', '#ffffff'], function(color) { 
+		if(planr.selectedNode != null) {
+			$.each(planr.selectedNode.connectors, function(i, con) { 
 				con.setColor(color); 
 			});
 		}
 		
-		if(kmnode.selectedConnector != null) {
-			kmnode.selectedConnector.setColor(color); 
-			kmnode.frame.canvas.breaker.setColor(color); 
+		if(planr.selectedConnector != null) {
+			planr.selectedConnector.setColor(color); 
+			planr.frame.canvas.breaker.setColor(color); 
 		}
 		
 	}, 'connector', {right: 20, top: 20});
@@ -194,7 +195,7 @@ kmnode.run = function(container){
  * @static
  * @returns {String} A unique ID
  */
-kmnode.createUUID = function() {
+planr.createUUID = function() {
   // http://www.ietf.org/rfc/rfc4122.txt
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -202,11 +203,11 @@ kmnode.createUUID = function() {
   });
 };
 
-kmnode.generateId = function() {
-	return kmnode.createUUID();
+planr.generateId = function() {
+	return planr.createUUID();
 };
 
-kmnode.setCaretPosition = function(elem, caretPos) {
+planr.setCaretPosition = function(elem, caretPos) {
     if(elem != null) {
         if(elem.createTextRange) {
             var range = elem.createTextRange();
@@ -238,7 +239,7 @@ kmnode.setCaretPosition = function(elem, caretPos) {
  * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
  * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
  */
-kmnode.roundRect = function(ctx, x, y, width, height, radius, fill, stroke) {
+planr.roundRect = function(ctx, x, y, width, height, radius, fill, stroke) {
 	if (typeof stroke == "undefined" ) {
 		stroke = true;
 	}
@@ -264,7 +265,7 @@ kmnode.roundRect = function(ctx, x, y, width, height, radius, fill, stroke) {
 	}        
 }
 
-kmnode.wrapText = function(context, text, x, y, maxWidth, lineHeight) {
+planr.wrapText = function(context, text, x, y, maxWidth, lineHeight) {
 	var words = text.split(' ');
 	var line = '';
 

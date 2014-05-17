@@ -1,8 +1,8 @@
-var kmnframe;
+var planrframe;
 var conn1;
 $(document).ready(function($) {
-	kmnode.run('container');
-	$('.kmn-node, .kmn-linker-handle').mousedown(function(evt) {
+	planr.run('container');
+	$('.planr-node, .planr-linker-handle').mousedown(function(evt) {
 		evt.stopPropagation();
 	});
 	
@@ -14,13 +14,13 @@ $(document).ready(function($) {
 		for(var i = 0; i < keys.length; i++) {
 			var option = $('<option>').attr('value', keys[i]);
 			option.html(keys[i]);
-			if(keys[i] != 'kmn-document')
+			if(keys[i] != 'planr-document')
 			$('#doclist').append(option);
 		}
 	}
 	
 	$('#savedoc').click(function(evt) {
-		kmnode.frame.storage.saveLocal(kmnode.frame.canvas.document);
+		planr.frame.storage.saveLocal(planr.frame.canvas.document);
 		loadKeys();
 		console.log('document saved...');
 	});
@@ -29,24 +29,24 @@ $(document).ready(function($) {
 		var docid = $('#doclist').val();
 		var doc = localStorage.getItem(docid);
 		console.log(doc);
-		kmnode.frame.canvas.document.fromJSON(doc);
-		kmnode.frame.canvas.render();
+		planr.frame.canvas.document.fromJSON(doc);
+		planr.frame.canvas.render();
 		console.log('document loaded...');
 	});
 	
 	$('#cleardoc').click(function(evt) {
-		kmnode.frame.canvas.element.click();
-		kmnode.frame.canvas.clear();
+		planr.frame.canvas.element.click();
+		planr.frame.canvas.clear();
 		console.log('canvas cleared...');
 	});
 	
 	$('#renderdoc').click(function(evt) {
-		kmnode.frame.canvas.render();
+		planr.frame.canvas.render();
 		console.log('canvas re-rendered...');
 	});
 	
 	$('#export').click(function(evt) {
-		var url = kmnode.frame.canvas.toImage();
+		var url = planr.frame.canvas.toImage();
 		
 		window.open(url, 'PNG');
 		
@@ -54,7 +54,7 @@ $(document).ready(function($) {
 	});
 	
 	$('#exportall').click(function(evt) {
-		var url = kmnode.frame.canvas.toImage(true);
+		var url = planr.frame.canvas.toImage(true);
 		
 		window.open(url, 'PNG');
 		

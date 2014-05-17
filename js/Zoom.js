@@ -1,17 +1,18 @@
 /*!
- * ColorPicker.js
+ * Zoom.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Zoom = function(zoom, handler, orientation, position) {
+	planr.Zoom = function(zoom, handler, orientation, position) {
 		this.element 		= null;
 		this.slider 		= null;
 		this.label 			= null;
@@ -27,12 +28,12 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the document
 	 */
-	kmnode.Zoom.prototype.init = function(zoom, handler, orientation, position) {
+	planr.Zoom.prototype.init = function(zoom, handler, orientation, position) {
 		var zoomer = this;
 		// zoom controller element
-		this.element = $('<div>').addClass('kmn-zoom');
-		this.slider = $('<div>').addClass('kmn-zoom-slider').css({width: this.length, height: 8});
-		this.label = $('<div>').addClass('kmn-zoom-label').text('100%');
+		this.element = $('<div>').addClass('planr-zoom');
+		this.slider = $('<div>').addClass('planr-zoom-slider').css({width: this.length, height: 8});
+		this.label = $('<div>').addClass('planr-zoom-label').text('100%');
 		this.element.append(this.slider, this.label);
 		
 		if(typeof position == 'object') {
@@ -59,14 +60,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the Zoom controller
 	 */
-	kmnode.Zoom.prototype.getElement = function() {
+	planr.Zoom.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Adds this widget to the frame
 	 */
-	kmnode.Zoom.prototype.setFrame = function(frame) {
+	planr.Zoom.prototype.setFrame = function(frame) {
 		this.frame = frame;
 		frame.element.append(this.element);
 	};

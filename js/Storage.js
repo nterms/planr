@@ -1,58 +1,59 @@
 /*!
  * Storage.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Storage = function() {
+	planr.Storage = function() {
 		this.init();
 	};
 	
 	/**
 	 * Initialize the storage
 	 */
-	kmnode.Storage.prototype.init = function() {
+	planr.Storage.prototype.init = function() {
 		
 	};
 	
 	/**
 	 * Save the current working document name in local storage
 	 * 
-	 * @param {kmnode.Document} The document object to be saved
+	 * @param {planr.Document} The document object to be saved
 	 */
-	kmnode.Storage.prototype.setCurrentDocument = function(document) {
-		localStorage.setItem('kmn-document', document.id);
+	planr.Storage.prototype.setCurrentDocument = function(document) {
+		localStorage.setItem('planr-document', document.id);
 	};
 	
 	/**
 	 * Save the document locally
 	 * 
-	 * @param {kmnode.Document} The document object to be saved
+	 * @param {planr.Document} The document object to be saved
 	 */
-	kmnode.Storage.prototype.saveLocal = function(document) {
+	planr.Storage.prototype.saveLocal = function(document) {
 		localStorage.setItem(document.id, document.toString());
 	};
 	
 	/**
 	 * Returns the the document saved in local storage
 	 * 
-	 * @param {kmnode.Document} The document object to be fetched
+	 * @param {planr.Document} The document object to be fetched
 	 */
-	kmnode.Storage.prototype.getDocumentLocal = function(id) {
+	planr.Storage.prototype.getDocumentLocal = function(id) {
 		return localStorage.getItem(id);
 	};
 	
 	/**
 	 * Clears the local storage
 	 */
-	kmnode.Storage.prototype.clearLocal = function(document) {
+	planr.Storage.prototype.clearLocal = function(document) {
 		localStorage.clear();
 		this.setCurrentDocument(document);
 	};
@@ -60,18 +61,18 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Save the document remotely on a database
 	 * 
-	 * @param {kmnode.Document} The document object to be saved
+	 * @param {planr.Document} The document object to be saved
 	 */
-	kmnode.Storage.prototype.saveRemote = function(document) {
+	planr.Storage.prototype.saveRemote = function(document) {
 		// TODO: code for saving the document remotely
 	};
 	
 	/**
 	 * Returns the the document saved in remote storage
 	 * 
-	 * @param {kmnode.Document} The document object to be fetched
+	 * @param {planr.Document} The document object to be fetched
 	 */
-	kmnode.Storage.prototype.getDocumentLocal = function(id) {
+	planr.Storage.prototype.getDocumentLocal = function(id) {
 		// TODO: code for fetching the document from the local storage
 	};
 

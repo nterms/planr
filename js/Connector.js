@@ -1,18 +1,19 @@
 /*!
  * Connector.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Connector = function(nodeFrom, nodeTo) {
-		this.id			= kmnode.generateId();
+	planr.Connector = function(nodeFrom, nodeTo) {
+		this.id			= planr.generateId();
 		this.element	= null;
 		this.nodeFromId	= null;
 		this.nodeFrom 	= null;
@@ -31,13 +32,13 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the connector object
 	 */
-	kmnode.Connector.prototype.init = function(nodeFrom, nodeTo) {
+	planr.Connector.prototype.init = function(nodeFrom, nodeTo) {
 		this.nodeFromId	= nodeFrom.id;
 		this.nodeFrom 	= nodeFrom;
 		this.nodeToId 	= nodeTo.id;
 		this.nodeTo 	= nodeTo;
 		
-		this.element = $('<canvas>').addClass('kmn-connector');
+		this.element = $('<canvas>').addClass('planr-connector');
 		
 		this.nodeFrom.connectors.push(this);
 		this.nodeTo.connectors.push(this);
@@ -48,7 +49,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {String} JSON string of the node
 	 */
-	kmnode.Connector.prototype.toString = function() {
+	planr.Connector.prototype.toString = function() {
 		
 		var json = 	'{' +
 					'"id": "'			+ this.id 			+ '",' +
@@ -64,7 +65,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @param {String} JSON object/string of the connector
 	 */
-	kmnode.Connector.prototype.fromJSON = function(json) {
+	planr.Connector.prototype.fromJSON = function(json) {
 		var c = (typeof json == 'string') ? eval("(" + json + ")") : json;
 		var connector = this;
 		
@@ -76,7 +77,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set color
 	 */
-	kmnode.Connector.prototype.setColor = function(color) {
+	planr.Connector.prototype.setColor = function(color) {
 		this.color = color;
 		this.update();
 	};
@@ -84,8 +85,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Calculate and returns the coordinates of the center
 	 */
-	kmnode.Connector.prototype.getCenter = function() {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Connector.prototype.getCenter = function() {
+		var zoom = planr.ZOOM_FACTOR;
 		var nf = this.nodeFrom;
 		var nt = this.nodeTo;
 		var left = ((nf.x < nt.x) ? nf.x : nt.x);
@@ -101,7 +102,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Set color
 	 */
-	kmnode.Connector.prototype.setColor = function(color) {
+	planr.Connector.prototype.setColor = function(color) {
 		this.color = color;
 		this.update();
 	};
@@ -110,8 +111,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * Update the visual properties of the connector
 	 * 
 	 */
-	kmnode.Connector.prototype.update = function() {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Connector.prototype.update = function() {
+		var zoom = planr.ZOOM_FACTOR;
 		var nf = this.nodeFrom;
 		var nt = this.nodeTo;
 		var left = ((nf.x < nt.x) ? nf.x : nt.x) * zoom;

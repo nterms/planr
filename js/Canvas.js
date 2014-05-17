@@ -1,25 +1,26 @@
 /*!
  * Canvas.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Canvas = function() {
+	planr.Canvas = function() {
 		this.element	= null;
 		this.frame 		= null;
 		this.linker		= null;
 		this.breaker	= null;
 		this.trash		= null;
 		this.document 	= null;
-		this.height 	= kmnode.CANVAS_HEIGHT;
-		this.width 		= kmnode.CANVAS_WIDTH;
+		this.height 	= planr.CANVAS_HEIGHT;
+		this.width 		= planr.CANVAS_WIDTH;
 		
 		this._exporter 	= null; // \	These are not properties of the Canvas
 		this._helper 	= null; // /	these variables will be initialized when required. Use with care.
@@ -30,25 +31,25 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the canvas
 	 */
-	kmnode.Canvas.prototype.init = function() {
+	planr.Canvas.prototype.init = function() {
 		var canvas = this;
 		
 		// create canvas element - not an instance of HTML <canvas/> element
-		this.element = $('<div>').addClass('kmn-canvas zoom-' + kmnode.ZOOM_FACTOR).css({width: this.width, height: this.height});
-		this.trash = $('<div>').addClass('kmn-canvas-trash').css('display', 'none');
+		this.element = $('<div>').addClass('planr-canvas zoom-' + planr.ZOOM_FACTOR).css({width: this.width, height: this.height});
+		this.trash = $('<div>').addClass('planr-canvas-trash').css('display', 'none');
 		this.element.append(this.trash);
 		
 		// linker
-		this.linker = new kmnode.Linker();
+		this.linker = new planr.Linker();
 		this.linker.setCanvas(this);
 		
 		// breaker
-		this.breaker = new kmnode.Breaker();
+		this.breaker = new planr.Breaker();
 		this.breaker.setCanvas(this);
 		
 		this.element.click(function(evt) {
 			evt.stopPropagation();
-			kmnode.events.emitEvent(kmnode.event.CANVAS_SELECTED, [canvas]);
+			planr.events.emitEvent(planr.event.CANVAS_SELECTED, [canvas]);
 			
 			// check whether user tries to select a connector
 			var offset = canvas.element.offset();
@@ -56,7 +57,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 			var y = (evt.pageY - offset.top);
 			var connector = canvas.connectorAt(x, y);
 			if(connector != null) {
-				kmnode.events.emitEvent(kmnode.event.CONNECTOR_SELECTED, [connector]);
+				planr.events.emitEvent(planr.event.CONNECTOR_SELECTED, [connector]);
 			}
 		});
 		
@@ -66,9 +67,9 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 				var offset = canvas.element.offset();
 				var x = evt.pageX - offset.left;
 				var y = evt.pageY - offset.top;
-				var node = new kmnode.Node(x, y);
+				var node = new planr.Node(x, y);
 				canvas.document.addNode(node);
-				kmnode.events.emitEvent(kmnode.event.NODE_SELECTED, [node]);
+				planr.events.emitEvent(planr.event.NODE_SELECTED, [node]);
 				canvas.render();
 			}
 		});
@@ -79,16 +80,16 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the canvas (not an HTML5 <canvas/> element)
 	 */
-	kmnode.Canvas.prototype.getElement = function() {
+	planr.Canvas.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Set the document of the canvas
 	 *
-	 * @param {kmnode.Document} The Document object
+	 * @param {planr.Document} The Document object
 	 */
-	kmnode.Canvas.prototype.setDocument = function(document) {
+	planr.Canvas.prototype.setDocument = function(document) {
 		this.document = document;
 		// set document name in storage as current document
 		this.frame.storage.setCurrentDocument(document);
@@ -99,12 +100,12 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @param {Number} The zooming level
 	 */
-	kmnode.Canvas.prototype.zoomTo = function(zoom) {
-		var z = kmnode.ZOOM_FACTOR;
-		kmnode.ZOOM_FACTOR = zoom;
+	planr.Canvas.prototype.zoomTo = function(zoom) {
+		var z = planr.ZOOM_FACTOR;
+		planr.ZOOM_FACTOR = zoom;
 		this.render();
 		
-		kmnode.events.emitEvent(kmnode.event.CANVAS_SELECTED, [this]);
+		planr.events.emitEvent(planr.event.CANVAS_SELECTED, [this]);
 		
 		// scroll the canvas to preserve the center
 		var scroller = this.frame.element.find('.dragscroll-scroller');
@@ -128,14 +129,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @param {Number} The x coordinate of the point
 	 * @param {Number} The y coordinate of the point
-	 * @return {kmnode.Node} The node contains the point given
+	 * @return {planr.Node} The node contains the point given
 	 */
-	kmnode.Canvas.prototype.nodeAt = function(x, y) {
+	planr.Canvas.prototype.nodeAt = function(x, y) {
 		if(typeof this.document == 'undefined' || this.document.nodes.length == 0) {
 			return null;
 		}
 		
-		var zoom = kmnode.ZOOM_FACTOR;
+		var zoom = planr.ZOOM_FACTOR;
 		var nodeIn = null;
 		$.each(this.document.nodes, function(i, node) {
 			var height = node.height * zoom;
@@ -159,14 +160,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @param {Number} The x coordinate of the point
 	 * @param {Number} The y coordinate of the point
-	 * @return {kmnode.Connector} The connector closest to the given point
+	 * @return {planr.Connector} The connector closest to the given point
 	 */
-	kmnode.Canvas.prototype.connectorAt = function(x, y) {
+	planr.Canvas.prototype.connectorAt = function(x, y) {
 		if(typeof this.document == 'undefined' || this.document.connectors.length == 0) {
 			return null;
 		}
 		
-		var zoom = kmnode.ZOOM_FACTOR;
+		var zoom = planr.ZOOM_FACTOR;
 		var threshold = 10 * zoom;
 		var connector = null;
 		var distance = 900000000; // we get a large number as starting point
@@ -202,19 +203,19 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	};/**
 	 *
 	 */
-	kmnode.Canvas.prototype.clear = function() {
-		this.element.find('.kmn-node, .kmn-connector, .kmn-note').appendTo(this.trash);
+	planr.Canvas.prototype.clear = function() {
+		this.element.find('.planr-node, .planr-connector, .planr-note').appendTo(this.trash);
 	};
 	
 	/**
 	 *
 	 */
-	kmnode.Canvas.prototype.render = function() {
+	planr.Canvas.prototype.render = function() {
 		var canvas = this;
 		
 		this.element.css({
-			height: this.height * kmnode.ZOOM_FACTOR,
-			width: this.width * kmnode.ZOOM_FACTOR
+			height: this.height * planr.ZOOM_FACTOR,
+			width: this.width * planr.ZOOM_FACTOR
 		});
 		
 		// draw the connectors first
@@ -249,7 +250,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {String} Image data
 	 */
-	kmnode.Canvas.prototype.toImage = function(all) {
+	planr.Canvas.prototype.toImage = function(all) {
 		var canvas = this.toCanvas(all);
 		
 		return canvas.toDataURL();
@@ -260,8 +261,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 * 
 	 * @returns {HTMLCanvasElement} HTML canvas element
 	 */
-	kmnode.Canvas.prototype.toCanvas = function(all) {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Canvas.prototype.toCanvas = function(all) {
+		var zoom = planr.ZOOM_FACTOR;
 		if(this._exporter == null) {
 			this._exporter = $('<canvas>');
 		}

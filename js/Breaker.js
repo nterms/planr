@@ -1,17 +1,18 @@
 /*!
- * Linker.js
+ * Breaker.js
  *
- * KM NODE - Node Style Data Visualizing Platform
+ * planr - HTML5 + JavaScript based mind and process planning software.
  * 
- * Copyright 2013, Kraken Media Pte. Ltd, http://www.kraken-media.com
- * Author: Saranga Abeykoon <saranga.abeykoon@kraken-media.com>
+ * Copyright (c) 2014 Saranga Abeykoon (http://blog.nterms.com)
  *
+ * Licensed under the MIT License (LICENSE.md).
+ * 
  */
  
-if(typeof kmnode == 'undefined') { kmnode = {}; }
+if(typeof planr == 'undefined') { planr = {}; }
 
 (function($) {
-	kmnode.Breaker = function() {
+	planr.Breaker = function() {
 		this.element	= null;
 		this.icon		= null;
 		this.canvas		= null;
@@ -28,22 +29,22 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Initialize the object
 	 */
-	kmnode.Breaker.prototype.init = function() {
+	planr.Breaker.prototype.init = function() {
 		var breaker		= this;
-		this.element 	= $('<div>').addClass('kmn-breaker');
-		this.icon		= $('<canvas>').addClass('kmn-breaker-icon').attr({width: this.width, height: this.height});
+		this.element 	= $('<div>').addClass('planr-breaker');
+		this.icon		= $('<canvas>').addClass('planr-breaker-icon').attr({width: this.width, height: this.height});
 		this.element.append(this.icon);
 		
 		this.element.click(function(evt) {
 			evt.stopPropagation();
-			kmnode.events.emitEvent(kmnode.event.BREAKER_CLICKED, [breaker]);
+			planr.events.emitEvent(planr.event.BREAKER_CLICKED, [breaker]);
 		});
 	};
 	
 	/**
 	 * Sets the canvas
 	 */
-	kmnode.Breaker.prototype.setCanvas = function(canvas) {
+	planr.Breaker.prototype.setCanvas = function(canvas) {
 		this.canvas = canvas;
 		canvas.element.append(this.element);
 	};
@@ -51,7 +52,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Attach the breaker to a connector
 	 */
-	kmnode.Breaker.prototype.attachTo = function(connector) {
+	planr.Breaker.prototype.attachTo = function(connector) {
 		this.connector = connector;
 		// get the center of the bounding box of the connector
 		var center = connector.getCenter();
@@ -64,7 +65,7 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Detach the breaker from a connector
 	 */
-	kmnode.Breaker.prototype.detach = function() {
+	planr.Breaker.prototype.detach = function() {
 		this.connector = null;
 		this.update();
 	};
@@ -74,14 +75,14 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	 *
 	 * @returns {jQuery} The HTML (jQuery enabled) element of the Breaker
 	 */
-	kmnode.Breaker.prototype.getElement = function() {
+	planr.Breaker.prototype.getElement = function() {
 		return this.element;
 	};
 	
 	/**
 	 * Set color
 	 */
-	kmnode.Breaker.prototype.setColor = function(color) {
+	planr.Breaker.prototype.setColor = function(color) {
 		this.color = color;
 		this.update();
 	};
@@ -89,8 +90,8 @@ if(typeof kmnode == 'undefined') { kmnode = {}; }
 	/**
 	 * Update the breaker
 	 */
-	kmnode.Breaker.prototype.update = function() {
-		var zoom = kmnode.ZOOM_FACTOR;
+	planr.Breaker.prototype.update = function() {
+		var zoom = planr.ZOOM_FACTOR;
 		
 		// hide if connector is not set
 		if(this.connector == null) {
